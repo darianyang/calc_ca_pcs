@@ -1,0 +1,5 @@
+     parm m01_2kod_12A.prmtop 
+ trajin ai_286_37.pdb 
+ autoimage 
+ trajout ai_ai_286_37.pdb pdb 
+ run
