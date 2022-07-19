@@ -10,13 +10,13 @@ import matplotlib.pyplot as plt
 
 # import datasets
 # starting with Q-factors
-qfs = np.loadtxt("qfs.txt")
+qfs = np.loadtxt("4-500agg/qfs.txt")
 angle = np.loadtxt("1-75_39_c2_angle.dat")[:,1]
 rmsd = np.loadtxt("rms_bb_xtal.dat")[:,1]
 
 #print(np.shape(angle))
 
-plt.scatter(angle, rmsd, c=qfs, s=1.5, cmap="twilight")
+plt.scatter(angle, rmsd, c=qfs, s=1.5)
 plt.xlabel("Angle")
 plt.ylabel("RMSD to Xtal ($\AA$)")
 cbar = plt.colorbar()
