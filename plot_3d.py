@@ -62,12 +62,12 @@ scat1 = plot_3d(he1, "HE1", ax=ax[0,0])
 scat2 = plot_3d(hz2, "HZ2", ax=ax[0,1])
 
 # D1 only
-plot_3d(he1, "HE1 (D1) PCS=0.145", ax=ax[1,0], vmin=0.12, vmax=0.125, filter=True)
-plot_3d(hz2, "HZ2 (D1) PCS=0.199", ax=ax[1,1], vmin=0.18, vmax=0.22, filter=True)
+plot_3d(he1, "HE1 (D1) PCS=0.145", ax=ax[1,0], vmin=0.135, vmax=0.155, filter=True)
+plot_3d(hz2, "HZ2 (D1) PCS=0.199", ax=ax[1,1], vmin=0.185, vmax=0.215, filter=True)
 
 # D2 only
-plot_3d(he1, "HE1 (D2) PCS=0.210", ax=ax[2,0], vmin=0.14, vmax=0.23, filter=True)
-plot_3d(hz2, "HZ2 (D2) PCS=0.184", ax=ax[2,1], vmin=0.165, vmax=0.25, filter=True)
+plot_3d(he1, "HE1 (D2) PCS=0.210", ax=ax[2,0], vmin=0.195, vmax=0.225, filter=True)
+plot_3d(hz2, "HZ2 (D2) PCS=0.184", ax=ax[2,1], vmin=0.175, vmax=0.195, filter=True)
 
 cbar = plt.colorbar(scat1)
 cbar.set_label("PCS")
