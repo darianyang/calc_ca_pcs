@@ -324,8 +324,11 @@ class PCS_Fit:
 # first run and get a dataset of pcs values for HE1 and HZ2 for the 400-500i ensemble
 # test of this below
 #pcs = PCS_Fit("400-500i_test.pdb", "Intra-PCS_H_CTDrenum.npc")
-pcs = PCS_Fit("400_500i_2kod_c2.pdb", "Intra-PCS_H_CTDrenum.npc")
+#pcs = PCS_Fit("400_500i_2kod_c2.pdb", "Intra-PCS_H_CTDrenum.npc")
+pcs = PCS_Fit("stability_test/i002000_s000026_f1.pdb", "pcs_data/Intra-PCS_H_CTDrenum.npc")
 pcs.multi_model_pcs(savetxt="back_pcs.txt")
 #print(pcs.multi_model_pcs())
+
+# Result is the combined HE1 and HZ2 intra+inter for each model
 
 # TODO: ready to run on H2P WE 400-500i pdb dataset
