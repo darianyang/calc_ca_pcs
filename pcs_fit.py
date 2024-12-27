@@ -338,9 +338,10 @@ class PCS_Fit:
 #print(pcs.multi_model_pcs())
 
 # testing, use with constant tensor for all models
-#pcs = PCS_Fit("stability_test/i002000_s000026_f1.pdb", "pcs_data/Intra-PCS_H_CTDrenum.npc", input_tensor="d1-fit-tensor")
-pcs = PCS_Fit("stability_test/i002000_s000058_f1.pdb", "pcs_data/Intra-PCS_H_CTDrenum.npc")#, input_tensor="d1-fit-tensor")
-pcs.multi_model_pcs(savetxt="back_pcs-d2.txt")
+pcs = PCS_Fit("stability_test/i002000_s000026_f1.pdb", "pcs_data/Intra-PCS_H_CTDrenum.npc")#, input_tensor="d1-fit-tensor")
+#pcs = PCS_Fit("stability_test/i002000_s000058_f1.pdb", "pcs_data/Intra-PCS_H_CTDrenum.npc")#, input_tensor="d1-fit-tensor")
+pcs.multi_model_pcs(savetxt="back_pcs.txt")
+print(f"QF: {pcs.qfac}")
 
 # Result is the combined HE1 and HZ2 intra+inter for each model
 
