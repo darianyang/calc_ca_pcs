@@ -15,7 +15,7 @@ warnings.filterwarnings("ignore")
 
 class PCS_Fit:
 
-    def __init__(self, pdb, pcs, model=0, chain=" ", residue=27, atom="NZ"):
+    def __init__(self, pdb, pcs, model=0, chain=" ", residue=27, atom="NZ", input_tensor=None):
         """
         Parameters
         ----------
@@ -33,6 +33,8 @@ class PCS_Fit:
             For initial metal position: Residue index, default 27.
         atom : str
             For initial metal position: Atom name, default 'NZ'.
+        input_tensor : str
+            Optional path to a input tensor file to use for all models.
         """
         self.pdb = pdb
         self.pcs = pcs
@@ -40,6 +42,7 @@ class PCS_Fit:
         self.chain = chain
         self.residue = residue
         self.atom = atom
+        self.input_tensor = input_tensor
 
     def calc_tensor(self, pdb=None, tensor_out=None):
         """
@@ -198,11 +201,15 @@ class PCS_Fit:
         else:
             prot = protein.load_pdb(self.pdb)
 
-        # fit the ∆chi tensor and save to file
-        self.calc_tensor(pdb=pdb, tensor_out=tensor)
-
-        # read tensor
-        met = metal.load_tensor(tensor)
+        # with no input tensor, calc tensor
+        if self.input_tensor is None:
+            # fit the ∆chi tensor and save to file
+            self.calc_tensor(pdb=pdb, tensor_out=tensor)
+            # read tensor
+            met = metal.load_tensor(tensor)
+        else:
+            # load tensor from file
+            met = metal.load_tensor(self.input_tensor)
 
         # open a file to write 
         with open(pcsout, "w") as f:
@@ -218,14 +225,14 @@ class PCS_Fit:
     
         pcs_output = np.loadtxt(pcsout, dtype=str)
         intra = pcs_output[pcs_output[:,0] == str(printpcs[0])]
-        #print("\nINTRA: \n", intra[intra[:,1] == "HE1"], "\n", intra[intra[:,1] == "HZ2"])
+        print("\nINTRA: \n", intra[intra[:,1] == "HE1"], "\n", intra[intra[:,1] == "HZ2"])
         inter = pcs_output[pcs_output[:,0] == str(printpcs[1])]
-        #print("\nINTER: \n", inter[inter[:,1] == "HE1"], "\n", inter[inter[:,1] == "HZ2"])
+        print("\nINTER: \n", inter[inter[:,1] == "HE1"], "\n", inter[inter[:,1] == "HZ2"])
         #print("\nINTRA + INTER:") 
         comb_he1 = float(intra[intra[:,1] == "HE1"][0,2]) + float(inter[inter[:,1] == "HE1"][0,2])
         comb_hz2 = float(intra[intra[:,1] == "HZ2"][0,2]) + float(inter[inter[:,1] == "HZ2"][0,2])
-        #print("\tHE1: ", comb_he1)
-        #print("\tHZ2: ", comb_hz2, "\n")
+        print("\tCOMBO HE1: ", comb_he1)
+        print("\tCOMBO HZ2: ", comb_hz2, "\n")
         return comb_he1, comb_hz2
     
     def multi_model_pcs(self, savetxt=None):
@@ -251,6 +258,7 @@ class PCS_Fit:
 
         # to be filled with pcs values of HE1 and HZ2 for each pdb file
         pcs_vals = np.zeros(shape=(len(models), 2))
+        #pcs_vals = np.zeros(shape=(len(models), 4)) # include intra and inter for HE1 and HZ2
 
         # calc q-factor for each model in multi-model pdb
         for i, m in enumerate(tqdm(models)):
@@ -325,9 +333,14 @@ class PCS_Fit:
 # test of this below
 #pcs = PCS_Fit("400-500i_test.pdb", "Intra-PCS_H_CTDrenum.npc")
 #pcs = PCS_Fit("400_500i_2kod_c2.pdb", "Intra-PCS_H_CTDrenum.npc")
-pcs = PCS_Fit("stability_test/i002000_s000026_f1.pdb", "pcs_data/Intra-PCS_H_CTDrenum.npc")
-pcs.multi_model_pcs(savetxt="back_pcs.txt")
+# pcs = PCS_Fit("stability_test/i002000_s000026_f1.pdb", "pcs_data/Intra-PCS_H_CTDrenum.npc")
+# pcs.multi_model_pcs(savetxt="back_pcs.txt")
 #print(pcs.multi_model_pcs())
+
+# testing, use with constant tensor for all models
+#pcs = PCS_Fit("stability_test/i002000_s000026_f1.pdb", "pcs_data/Intra-PCS_H_CTDrenum.npc", input_tensor="d1-fit-tensor")
+pcs = PCS_Fit("stability_test/i002000_s000058_f1.pdb", "pcs_data/Intra-PCS_H_CTDrenum.npc")#, input_tensor="d1-fit-tensor")
+pcs.multi_model_pcs(savetxt="back_pcs-d2.txt")
 
 # Result is the combined HE1 and HZ2 intra+inter for each model
 
